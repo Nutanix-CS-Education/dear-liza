@@ -37,6 +37,8 @@ for f in $logRoot/**/**/*.json
 		if [[ $fixJSON ]] && ! grep --quiet '^\[' $f; then
 			sed -i '' -e '1s|^|[|' -e 's|}$|},|' -e '$s|,$|]|' $f
 			python -m json.tool $f &>/dev/null && echo "$f: is now a JSON array"
+		else
+			echo "Skipping the JSON fix stage for $f"
 		fi
 
 		if [[ $convertCSV && ! -e $f.csv ]]; then
@@ -62,6 +64,8 @@ for f in $logRoot/**/**/*.json
 			else
 				echo -e "\033[1;31m$f.csv does not contain RELEASE records\033[0m"
 			fi
+		else
+			echo "Skipping the CSV creation stage for $f"
 			
 		fi
 

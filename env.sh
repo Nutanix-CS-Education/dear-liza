@@ -7,7 +7,7 @@ export fixJSON=true
 export convertCSV=true
 # normally the script will only download the files that gsutil has not previously downloaded... doing a clean blows away the log and the cache first
 # causing the system to re-download the whole shebang
-export clean=true
+export clean=false
 
 # this root will be the path that contains the root folder of the copied log files
 export rootPath=/Users/jared.rypkahauer/Developer/Node.js/td3-driveshaft/gcp/logs
