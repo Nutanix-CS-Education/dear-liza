@@ -11,9 +11,7 @@ export clean=false
 
 # this root will be the path that contains the root folder of the copied log files
 export rootPath=/Users/jared.rypkahauer/Developer/Node.js/td3-driveshaft/gcp/logs
-# Just a helper for the processing phase - eveentually remove or replace
-export logRoot=$rootPath/2020
-# experimental
+# The subfolders of $rootPath that contain the saved log files... 
 export logRootDirs=(2020 2021)
 # for connecting csvsql to the DB to save the log files
 export dbconnectstring=mysql+mysqlconnector://root:@127.0.0.1:3306/udacity_logs
