@@ -17,7 +17,10 @@ clear
 
 if $clean; then
 	# clean up from the last run and refresh the GCP logs
-	[[ -e $logRoot ]] && rm -R $logRoot
+	for d in ${logRootDirs[@]}
+		do
+			[[ -e ${rootPath}/${d} ]] && rm -R ${rootPath}/${d}
+		done
 	> $gcpXferLog
 fi
 
@@ -93,24 +96,29 @@ for d in ${logRootDirs[@]}
 		# exec csvstack against the list of found csv files
 		find ${rootPath}/${d} -name '*.getavailable.csv' -exec csvstack {} >>$rootPath/getavailable.csv +
 		# normalize the column names in the output CSV - col name formats are /foo/bar/fiddle (represents key names in original JSON) - strip all but the last word in the col names
-done
+	done
 		sed -i '' '1s|[[:alnum:]_]*/||g' $rootPath/getavailable.csv   && echo "Fixed column names in $rootPath/getavailable.csv."
 		# send the contents of the output CSV to the MySQL DB running locally
 		csvsql --db $dbconnectstring --tables getavailable --insert --overwrite $rootPath/getavailable.csv && echo -e "\033[1;34mPushing getavailable data to the MySQL database \033[0;33m($(cat $rootPath/getavailable.csv | wc -l | xargs) records)\033[0m."
 		echo
 
 # process the log files
+		# same process as above only for a different output file
 for d in ${logRootDirs[@]}
 	do
-		# same process as above only for a different output file
-		echo "Stacking release requests from ${d} into $rootPath/release.csv"
-		find $logRoot -name '*.release.csv' -exec csvstack {} >>$rootPath/release.csv +
-done
+		echo "Stacking getavailable requests from ${rootPath}/${d} into ${rootPath}/release.csv"
+		find ${rootPath}/${d} -name '*.release.csv' -exec csvstack {} >>$rootPath/release.csv +
+	done
 		sed -i '' '1s|[[:alnum:]_]*/||g' $rootPath/release.csv && echo "Fixed column names in release.csv."
 		csvsql --db $dbconnectstring --tables release --insert --overwrite $rootPath/release.csv && echo -e "\033[1;34mPushing release data  to the MySQL database \033[0;33m($(cat $rootPath/release.csv | wc -l | xargs) records)\033[0m."
 		echo
 
-echo -e "\033[0;33mProcessed \033[1;34m$(find $logRoot -name "*.json" | wc -l | xargs) \033[0;33mfiles in \033[1;34m$(convertsecs2hms $(( SECONDS-start)) )\033[0;33m.\033[0m"
+fileCount=0
+for d in ${logRootDirs[@]}
+	do
+		export fileCount=$(( $fileCount+`find ${rootPath}/${d} -name "*.json" | wc -l | xargs` ))
+	done
+echo -e "\033[0;33mProcessed \033[1;34m${fileCount} \033[0;33mfiles in \033[1;34m$(convertsecs2hms $(( SECONDS-start)) )\033[0;33m.\033[0m"
 
 
 # utility/testing below here

@@ -14,7 +14,7 @@ export rootPath=/Users/jared.rypkahauer/Developer/Node.js/td3-driveshaft/gcp/log
 # The subfolders of $rootPath that contain the saved log files... 
 export logRootDirs=(2020 2021)
 # for connecting csvsql to the DB to save the log files
-export dbconnectstring=mysql+mysqlconnector://root:@127.0.0.1:3306/udacity_logs
+export dbconnectstring=mysql+mysqlconnector://root:juddley^4@127.0.0.1:3306/udacity_logs
 # A CSV file that GCP and gsutil uses to determine which files have been downloaded and which are new
 export gcpXferLog=$rootPath/xfers.log.csv
 # the URL for the GCP bucket - assumes you have proper credentials and are logged in
