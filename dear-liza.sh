@@ -1,4 +1,4 @@
-#!/bin/bash
+.#!/bin/bash
 
 # The name comes from "There's a hole in the bucket, dear liza" - and the program drains the GCP logs from the GCP sink bucket... ;)
 start=$SECONDS
@@ -25,7 +25,7 @@ if $clean; then
 fi
 
 # tell gsutil to copy the whole bucket down
-gsutil -m cp -L $gcpXferLog -r -n $gcpBucketURL/$gcpLogName/* $rootPath
+gsutil cp -L $gcpXferLog -r -n $gcpBucketURL/$gcpLogName/* $rootPath
 
 
 # process the log files
