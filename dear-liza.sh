@@ -1,4 +1,8 @@
-.#!/bin/bash
+#!/bin/bash
+echo "Commencing run at: `date`"
+
+( [[ `set | grep TERM | wc -l` -gt 5 ]] && echo "Running in $TERM" ) || ( echo "Not running in an interactive terminal" && echo "Setting TERM value to 'xterm'" && export TERM=xterm )
+
 
 # The name comes from "There's a hole in the bucket, dear liza" - and the program drains the GCP logs from the GCP sink bucket... ;)
 start=$SECONDS
